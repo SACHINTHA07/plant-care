@@ -1,0 +1,128 @@
+{% extends "layout.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h1>Dashboard</h1>
+
+<div class="dashboard-grid">
+    <a href="{{ url_for('diagnose') }}" class="card quick-action-card">
+        <div class="quick-upload-box">
+            <span class="upload-icon"><i class="fa-solid fa-stethoscope"></i></span>
+            <h3>New Diagnosis</h3>
+            <p>Upload a plant image to get started.</p>
+        </div>
+    </a>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Recent Diagnosis</h3>
+            <a href="{{ url_for('logbook') }}" class="view-all">View all</a>
+        </div>
+        <div class="list">
+            {% for diagnosis in diagnoses %}
+            <a href="{{ url_for('results', diagnosis_id=diagnosis._id) }}" class="list-item diagnosis-item">
+                <div class="icon {{ 'healthy' if 'healthy' in diagnosis.disease_name|lower else 'disease' }}"><i class="fa-solid fa-seedling"></i></div>
+                <div class="content">
+                    <div class="title">{{ diagnosis.get('plant_identifier', '') }}: {{ diagnosis.disease_name }}</div>
+                    <div class="subtitle">{{ diagnosis.timestamp.strftime('%B %d, %Y') }}</div>
+                </div>
+                <span class="confidence-pill">{{ diagnosis.confidence }}</span>
+            </a>
+            {% else %}
+            <p class="empty-state">No recent diagnoses found.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Today's Tasks</h3>
+        </div>
+        <div class="list task-list-scrollable">
+            {% for task in tasks %}
+            <div class="task-item {% if task.is_completed %}completed{% endif %}">
+                <input type="checkbox" id="task-{{ task._id }}" data-task-id="{{ task._id }}" {% if task.is_completed %}checked{% endif %}>
+                <label for="task-{{ task._id }}" class="content">
+                    <div class="title">{{ task.description }}</div>
+                    <div class="subtitle">
+                        {% if task.get('is_all_day') %}
+                            All Day
+                        {% else %}
+                            {{ task.due_date.strftime('%I:%M %p') }}
+                        {% endif %}
+                    </div>
+                </label>
+                <button class="delete-task-btn" data-task-id="{{ task._id }}" title="Delete Task">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            </div>
+            {% else %}
+             <p class="empty-state">You have no tasks scheduled for today.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="smart-suggestions">
+    <h2>Smart Suggestions</h2>
+    <div class="dashboard-grid">
+        <div class="card suggestion-card">
+            <div class="icon"><i class="fa-solid fa-cloud-sun-rain"></i></div>
+            {% if weather %}
+                <h4>Weather Alert for {{ weather.current.location }}</h4>
+                <div class="weather-grid">
+                    <div class="weather-current-conditions">
+                        <div class="weather-main">
+                            <img src="http://openweathermap.org/img/wn/{{ weather.current.icon }}@2x.png" alt="Weather icon" class="weather-main-icon">
+                            <p class="weather-temp">{{ weather.current.temp|round(1) }}°C</p>
+                            <p class="weather-condition">{{ weather.current.condition }}</p>
+                        </div>
+                        <div class="weather-details">
+                            <div class="weather-detail-item">
+                                <i class="fa-solid fa-temperature-half"></i>
+                                <span>Feels like: <strong>{{ weather.current.feels_like|round(1) }}°C</strong></span>
+                            </div>
+                            <div class="weather-detail-item">
+                                <i class="fa-solid fa-droplet"></i>
+                                <span>Humidity: <strong>{{ weather.current.humidity }}%</strong></span>
+                            </div>
+                            <div class="weather-detail-item">
+                                <i class="fa-solid fa-wind"></i>
+                                <span>Wind: <strong>{{ weather.current.wind_kph }} kph</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weather-forecast">
+                        <h5>Tomorrow</h5>
+                        <img src="http://openweathermap.org/img/wn/{{ weather.forecast.icon }}@2x.png" alt="Forecast icon" class="forecast-icon">
+                        <p class="forecast-temp">
+                            <strong>{{ weather.forecast.maxtemp|round(0) }}°</strong> / {{ weather.forecast.mintemp|round(0) }}°
+                        </p>
+                        <p class="forecast-condition">{{ weather.forecast.condition }}</p>
+                        <p class="forecast-rain">
+                            <i class="fa-solid fa-cloud-showers-heavy"></i>
+                            {{ weather.forecast.chance_of_rain }}% rain
+                        </p>
+                    </div>
+                </div>
+                <hr>
+                <div class="weather-advice">
+                    <i class="fa-solid fa-lightbulb"></i>
+                    <p>{{ weather_advice }}</p>
+                </div>
+            {% else %}
+                <h4>Weather Alert</h4>
+                <p>The weather forecast feature is currently unavailable. Please check the API configuration.</p>
+            {% endif %}
+        </div>
+
+        <div class="card suggestion-card">
+            <div class="icon"><i class="fa-solid fa-lightbulb"></i></div>
+            <h4 class="card-main-title">Field Insights</h4>
+            <h5 class="news-headline">{{ innovations.headline }}</h5>
+            <p class="news-summary">{{ innovations.summary }}</p>
+            <a href="{{ 'https://news.google.com/search?q=' + innovations.headline|urlencode }}" target="_blank" class="view-details">Read more</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

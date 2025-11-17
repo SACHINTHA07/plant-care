@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+{% block title %}Admin - User Management{% endblock %}
+
+{% block content %}
+<h1>User Management</h1>
+<p class="subtitle">Add, edit, or remove user accounts.</p>
+
+<div class="card" style="margin-bottom: 24px;">
+    <h3><i class="fa-solid fa-user-plus"></i> Add New User</h3>
+    <form method="POST" action="{{ url_for('admin_add_user') }}">
+        <div class="form-grid" style="margin-top: 16px;">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select id="role" name="role">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="country">Country</label>
+                <input type="text" id="country" name="country" required>
+            </div>
+            <div class="form-group">
+                <label for="crop_location">Crop City/Location</label>
+                <input type="text" id="crop_location" name="crop_location" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Address (Optional)</label>
+                <input type="text" id="address" name="address">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin-top: 16px;">Create User</button>
+    </form>
+</div>
+
+<div class="card">
+    <h3><i class="fa-solid fa-users"></i> All Users ({{ users|length }})</h3>
+    <div class="schedule-container" style="margin-top: 16px;">
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Crop Location</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td><span class="confidence-pill" style="background-color: {% if user.role == 'admin' %}var(--light-green-bg){% else %}#e9ecef{% endif %}; color: {% if user.role == 'admin' %}var(--dark-green){% else %}var(--text-secondary){% endif %};">{{ user.role }}</span></td>
+                    <td>{{ user.crop_location }}</td>
+                    <td>
+                        <div class="log-actions" style="margin-top: 0; gap: 8px;">
+                            <button class="btn btn-tertiary" 
+                                    data-user-id="{{ user._id }}"
+                                    data-name="{{ user.name }}"
+                                    data-email="{{ user.email }}"
+                                    data-role="{{ user.role }}"
+                                    data-country="{{ user.country }}"
+                                    data-crop_location="{{ user.crop_location }}"
+                                    data-address="{{ user.address }}"
+                                    onclick="openEditUserModal(this)">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            
+                            <form method="POST" action="{{ url_for('admin_delete_user', user_id=user._id) }}" class="delete-log-form" style="margin: 0;">
+                                <button type="submit" class="btn btn-danger" {% if user._id == current_user.id %}disabled title="Cannot delete yourself"{% endif %}>
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

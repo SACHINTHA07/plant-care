@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block title %}Logbook{% endblock %}
+
+{% block content %}
+<h1>Diagnosis Logbook</h1>
+<p class="subtitle">A complete history of all your plant diagnoses.</p>
+<div class="logbook-container">
+    {% for diagnosis in diagnoses %}
+    <div class="card log-item">
+        <div class="log-image">
+            <img src="{{ url_for('static', filename=diagnosis.image_path) }}" alt="Diagnosis image">
+        </div>
+        <div class="log-content">
+            <div class="log-header">
+                <h3>{{ diagnosis.plant_identifier }}: {{ diagnosis.disease_name }}</h3>
+                <span class="confidence-pill">{{ diagnosis.confidence }}</span>
+            </div>
+            <p class="log-date">
+                <i class="fa-solid fa-calendar-alt"></i> Diagnosed on: {{ diagnosis.timestamp.strftime('%B %d, %Y at %I:%M %p') }}
+            </p>
+            <div class="log-details">
+                <p><strong>AI Summary:</strong> {{ diagnosis.suggestions.description | truncate(150) }}</p>
+            </div>
+            <div class="log-actions">
+                <a href="{{ url_for('results', diagnosis_id=diagnosis._id) }}" class="btn btn-tertiary">View Full Report</a>
+                
+                <a href="{{ url_for('follow_up_diagnose', original_diagnosis_id=diagnosis._id) }}" class="btn btn-primary">
+                    <i class="fa-solid fa-camera-rotate"></i> Start Follow-up
+                </a>
+
+                <button class="btn btn-danger btn-report-inaccuracy" data-diagnosis-id="{{ diagnosis._id }}">
+                    <i class="fa-solid fa-flag"></i> Report
+                </button>
+
+                <form method="POST" action="{{ url_for('delete_diagnosis', diagnosis_id=diagnosis._id) }}" class="delete-log-form">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fa-solid fa-trash"></i> Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="card empty-state-full">
+        <i class="fa-solid fa-book-open-reader"></i> <p>Your logbook is empty. <a href="{{ url_for('diagnose') }}">Make your first diagnosis</a> to get started.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

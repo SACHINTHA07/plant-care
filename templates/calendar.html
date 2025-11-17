@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}Treatment Calendar{% endblock %}
+
+{% block head_extra %}
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+{% endblock %}
+
+{% block content %}
+<h1>Treatment Calendar</h1>
+<p class="subtitle">Keep track of your scheduled plant care tasks and treatments.</p>
+<div class="card">
+    <div id="calendar"></div>
+</div>
+{% endblock %}

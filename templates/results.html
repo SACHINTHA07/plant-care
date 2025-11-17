@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+{% block title %}Diagnosis Results{% endblock %}
+
+{% block content %}
+<h1>Diagnosis for: {{ diagnosis.plant_identifier }}</h1>
+<div class="results-container">
+    <div class="results-image-card card">
+        <h3>Uploaded Image</h3>
+        <img src="{{ url_for('static', filename=diagnosis.image_path) }}" alt="Uploaded plant image">
+        
+        <div class="prediction-summary">
+            <h4>Prediction: <strong>{{ diagnosis.disease_name }}</strong></h4>
+            <p>Confidence: {{ diagnosis.confidence }}</p>
+        </div>
+    </div>
+    <div class="results-details-card card">
+        <h3><i class="fa-solid fa-brain"></i> AI Generated Advice</h3>
+        
+        <div class="suggestion-section">
+            <h4>Description</h4>
+            <div>{{ diagnosis.suggestions.description | markdown | safe }}</div>
+        </div>
+
+        <div class="suggestion-section">
+            <h4>Treatment Plan</h4>
+            <div>{{ diagnosis.suggestions.treatment | markdown | safe }}</div>
+        </div>
+
+        <div class="suggestion-section">
+            <h4>Prevention</h4>
+            <div>{{ diagnosis.suggestions.prevention | markdown | safe }}</div>
+        </div>
+        
+        <hr>
+        <div class="action-section">
+            <div class="suggestion-section" style="margin-bottom: 20px;">
+                <h4>Is this diagnosis helpful?</h4>
+                <div class="log-actions" style="margin-top: 8px;">
+                    <button class="btn btn-primary btn-confirm-accuracy" data-diagnosis-id="{{ diagnosis._id }}">
+                        <i class="fa-solid fa-thumbs-up"></i> Yes, it's accurate
+                    </button>
+                    <button class="btn btn-danger btn-report-inaccuracy" data-diagnosis-id="{{ diagnosis._id }}">
+                        <i class="fa-solid fa-flag"></i> No, report inaccuracy
+                    </button>
+                </div>
+            </div>
+            <h4>Generated Treatment Schedule</h4>
+            {% if diagnosis.suggestions.schedule and diagnosis.suggestions.schedule|length > 0 %}
+                <div class="schedule-container">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Task</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for task in diagnosis.suggestions.schedule %}
+                            <tr class="task-row" data-date="{{ task.date }}" data-task="{{ task.task }}" data-details="{{ task.details }}">
+                                <td>{{ task.date }}</td>
+                                <td>{{ task.task }}</td>
+                                <td>{{ task.details }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="action-buttons">
+                    <button id="add-schedule-btn" class="btn btn-secondary" data-diagnosis-id="{{ diagnosis._id }}">
+                        <i class="fa-solid fa-calendar-plus"></i> Add Full Schedule to Calendar
+                    </button>
+                    <button id="schedule-follow-up-btn" class="btn btn-primary" data-diagnosis-id="{{ diagnosis._id }}">
+                        <i class="fa-solid fa-camera-rotate"></i> Schedule 7-Day Follow-up
+                    </button>
+                </div>
+            {% else %}
+                <p>No actionable schedule could be generated for this diagnosis.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

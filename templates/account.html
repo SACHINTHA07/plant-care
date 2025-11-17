@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% block title %}Account Settings{% endblock %}
+
+{% block content %}
+<h1>Account Settings</h1>
+<p class="subtitle">Update your profile information and manage your password.</p>
+
+<div class="card">
+    <form method="POST" action="{{ url_for('account') }}">
+        
+        <h4>Profile Information</h4>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" value="{{ user.name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" value="{{ user.email }}" readonly disabled>
+                <small>Email address cannot be changed.</small>
+            </div>
+            <div class="form-group">
+                <label for="country">Country</label>
+                <input type="text" id="country" name="country" value="{{ user.country }}" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Address (Optional)</label>
+                <input type="text" id="address" name="address" value="{{ user.address }}">
+            </div>
+            <div class="form-group">
+                <label for="crop_location">Crop City/Location (for weather)</label>
+                <input type="text" id="crop_location" name="crop_location" value="{{ user.crop_location }}" required>
+            </div>
+        </div>
+
+        <hr>
+
+        <h4>Change Password</h4>
+        <p class="subtitle" style="margin-bottom: 1rem;">Leave these fields blank to keep your current password.</p>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="new_password">New Password</label>
+                <input type="password" id="new_password" name="new_password">
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm New Password</label>
+                <input type="password" id="confirm_password" name="confirm_password">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+</div>
+{% endblock %}

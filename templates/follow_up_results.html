@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block title %}Follow-up Report{% endblock %}
+
+{% block content %}
+<h1>Follow-up Report for: {{ original.plant_identifier }}</h1>
+<p class="subtitle">Comparing the diagnosis from {{ original.timestamp.strftime('%B %d') }} with today's results.</p>
+
+<div class="card comparison-summary">
+    <h3><i class="fa-solid fa-lightbulb"></i> Progress Summary</h3>
+    <p>{{ summary }}</p>
+</div>
+
+<div class="comparison-container">
+    <div class="card comparison-card">
+        <h4>Before Treatment</h4>
+        <p class="comparison-date">{{ original.timestamp.strftime('%B %d, %Y') }}</p>
+        <img src="{{ url_for('static', filename=original.image_path) }}" alt="Original image">
+        <div class="prediction-summary">
+            <h5>Diagnosis: <strong>{{ original.disease_name }}</strong></h5>
+            <p>Confidence: {{ original.confidence }}</p>
+        </div>
+    </div>
+    <div class="card comparison-card">
+        <h4>After Treatment</h4>
+        <p class="comparison-date">{{ new.timestamp.strftime('%B %d, %Y') }}</p>
+        <img src="{{ url_for('static', filename=new.image_path) }}" alt="New image">
+        <div class="prediction-summary">
+            <h5>Diagnosis: <strong>{{ new.disease_name }}</strong></h5>
+            <p>Confidence: {{ new.confidence }}</p>
+        </div>
+        
+        <hr>
+        <div class="suggestion-section" style="margin-bottom: 0; margin-top: 16px;">
+            <h4>Is this new diagnosis helpful?</h4>
+            <div class="log-actions" style="margin-top: 8px;">
+                <button class="btn btn-primary btn-confirm-accuracy" data-diagnosis-id="{{ new._id }}">
+                    <i class="fa-solid fa-thumbs-up"></i> Yes, it's accurate
+                </button>
+                <button class="btn btn-danger btn-report-inaccuracy" data-diagnosis-id="{{ new._id }}">
+                    <i class="fa-solid fa-flag"></i> No, report inaccuracy
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

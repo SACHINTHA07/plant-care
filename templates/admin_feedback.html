@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block title %}Admin - User Feedback{% endblock %}
+
+{% block content %}
+<h1>User Feedback</h1>
+<p class="subtitle">Review diagnoses that users have either confirmed or reported.</p>
+
+<div class="dashboard-grid" style="margin-bottom: 24px;">
+    <div class="card">
+        <h3 style="margin-bottom: 16px;">Feedback Overview</h3>
+        <div class="chart-container">
+            <canvas id="feedbackPieChart"></canvas>
+        </div>
+    </div>
+    <div class="card">
+        <h3 style="margin-bottom: 16px;">Most Reported Inaccurate Diseases</h3>
+        <div class="chart-container">
+            <canvas id="inaccuracyBarChart"></canvas>
+        </div>
+    </div>
+</div>
+<hr style="margin-bottom: 24px;">
+<div class="logbook-container">
+    {% for diagnosis in diagnoses %}
+    <div class="card log-item">
+        <div class="log-image">
+            <img src="{{ url_for('static', filename=diagnosis.image_path) }}" alt="Diagnosis image">
+        </div>
+        <div class="log-content">
+
+            {% if diagnosis.confirmed_accurate %}
+                <p style="color: var(--dark-green); font-weight: 600; margin-bottom: 8px;"><i class="fa-solid fa-thumbs-up"></i> Confirmed as Accurate</p>
+            {% elif diagnosis.reported_as_inaccurate %}
+                <p style="color: var(--danger-color); font-weight: 600; margin-bottom: 8px;"><i class="fa-solid fa-flag"></i> Reported as Inaccurate</p>
+            {% endif %}
+
+            <div class="log-header">
+                <h3>{{ diagnosis.plant_identifier }}: {{ diagnosis.disease_name }}</h3>
+                <span class="confidence-pill">{{ diagnosis.confidence }}</span>
+            </div>
+            <p class="log-date">
+                <i class="fa-solid fa-calendar-alt"></i> Diagnosed on: {{ diagnosis.timestamp.strftime('%B %d, %Y') }}
+            </p>
+
+            {% if diagnosis.reported_as_inaccurate %}
+            <p class="log-date" style="color: var(--danger-color);">
+                <i class="fa-solid fa-flag"></i> Reported on: {{ diagnosis.report_timestamp.strftime('%B %d, %Y at %I:%M %p') }}
+            </p>
+            {% elif diagnosis.confirmed_accurate and diagnosis.confirm_timestamp %}
+            <p class="log-date" style="color: var(--dark-green);">
+                <i class="fa-solid fa-thumbs-up"></i> Confirmed on: {{ diagnosis.confirm_timestamp.strftime('%B %d, %Y at %I:%M %p') }}
+            </p>
+            {% endif %}
+            
+            <hr style="margin: 16px 0;">
+
+            <div class="log-details">
+                <p><strong><i class="fa-solid fa-user-doctor"></i> AI Diagnosis:</strong> {{ diagnosis.disease_name }}</p>
+                
+                {% if diagnosis.reported_as_inaccurate %}
+                <p><strong><i class="fa-solid fa-comment-dots"></i> User's Report:</strong></p>
+                <blockquote style="border-left: 4px solid var(--border-color); padding-left: 12px; color: var(--text-primary); margin-top: 8px;">
+                    {{ diagnosis.report_reason }}
+                </blockquote>
+                {% endif %}
+            </div>
+            
+            <div class="log-actions">
+                <a href="{{ url_for('results', diagnosis_id=diagnosis._id) }}" class="btn btn-tertiary">View Full AI Report</a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="card empty-state-full">
+        <p>There is no user feedback at this time.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
