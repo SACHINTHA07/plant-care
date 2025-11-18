@@ -1,4 +1,4 @@
-name: Web Build + Deployment to GitHub Pages 
+name: Web Build + Deployment to GitHub Pages
 
 on:
   # Runs on push to any of the below branches
@@ -61,7 +61,8 @@ jobs:
     - name: Flet Build Web
       run: |
         echo "GITHUB_REPOSITORY: ${GITHUB_REPOSITORY}, USER: ${GITHUB_REPOSITORY%/*}, PROJECT_BASE_URL: ${GITHUB_REPOSITORY#*/}"
-        flet build web --base-url ${GITHUB_REPOSITORY#*/} --route-url-strategy hash
+        # MODIFICATION: Insert 'app.py' to explicitly point Flet to your main app file
+        flet build web **app.py** --base-url ${GITHUB_REPOSITORY#*/} --route-url-strategy hash
 
     - name: Upload Artifact
       uses: actions/upload-pages-artifact@v3
