@@ -23,12 +23,12 @@ app = Flask(__name__)
 
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
-# --- CONFIGURATION ---
+# CONFIGURATION
 app.config["SECRET_KEY"] = os.urandom(24)
 app.config["MONGO_URI"] = os.getenv("MONGO_URI")
 
 
-# --- INITIALIZE EXTENSIONS & CUSTOM FILTERS ---
+# INITIALIZE EXTENSIONS & CUSTOM FILTERS
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
@@ -39,18 +39,18 @@ def markdown_filter(s):
     return markdown2.markdown(s, extras=["fenced-code-blocks", "tables"])
 
 
-# --- DATABASE COLLECTIONS ---
+# DATABASE COLLECTIONS
 users_collection = mongo.db.users
 diagnoses_collection = mongo.db.diagnoses
 tasks_collection = mongo.db.tasks
 
-# --- MODEL LOADING & CONSTANTS ---
+# MODEL LOADING
 MODEL_PATH = 'banana_disease_model.keras'
 model = load_model(MODEL_PATH)
 CLASS_NAMES = ['Anthracnose', 'Banana Fruit-Scarring Beetle', 'Banana Split Peel', 'Healthy Banana', 'Leaf Banana Black Sigatoka Disease', 'Leaf Banana Bract Mosaic Virus Disease', 'Leaf Banana Healthy Leaf', 'Leaf Banana Insect Pest Disease', 'Leaf Banana Moko Disease', 'Leaf Banana Natural Death', 'Leaf Banana Panama Disease', 'Leaf Banana Yellow Sigatoka Disease']
 HEALTHY_CONDITIONS = ['healthy banana', 'leaf banana healthy leaf', 'leaf banana natural death']
 
-# --- USER AUTHENTICATION ---
+# USER AUTHENTICATION
 class User(UserMixin):
     def __init__(self, user_data):
         self.id = str(user_data["_id"])
@@ -64,7 +64,7 @@ def load_user(user_id):
     user_data = users_collection.find_one({"_id": ObjectId(user_id)})
     return User(user_data) if user_data else None
 
-# --- ADMIN ROUTES ---
+# ADMIN ROUTES
 
 def admin_required(f):
     @wraps(f)
@@ -176,7 +176,7 @@ def admin_feedback():
     return render_template('admin_feedback.html', diagnoses=feedback_diagnoses)
 
 
-# --- AI & EXTERNAL API HELPERS ---
+# AI & Weather API 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 gemini_model = genai.GenerativeModel('gemini-2.5-flash')
 
@@ -401,7 +401,7 @@ def get_comparison_advice(old_diagnosis, new_diagnosis):
         print(f"Gemini API Error (Comparison): {e}")
         return "Could not generate a comparison at this time."
 
-# --- AUTHENTICATION ROUTES ---
+# Signup Route
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -446,7 +446,7 @@ def logout():
     return redirect(url_for('login'))
 
 
-# --- CORE APPLICATION ROUTES ---
+# CORE APPLICATION ROUTES
 @app.route('/')
 @login_required
 def index():
@@ -603,7 +603,7 @@ def account():
     return render_template('account.html', user=user_data)
 
 
-# --- API ROUTES (for JavaScript) ---
+# API ROUTES for JavaScript
 @app.route('/api/toggle_task/<task_id>', methods=['POST'])
 @login_required
 def toggle_task(task_id):
@@ -755,17 +755,17 @@ def report_diagnosis(diagnosis_id):
     else:
         return jsonify({'status': 'error', 'message': 'Diagnosis not found or permission denied.'}), 404
 
-# --- NEW: ADMIN CHART DATA API ---
+# ADMIN CHART DATA API
 @app.route('/api/admin/chart_data', endpoint='admin_chart_data')
 @login_required
 @admin_required
 def admin_chart_data():
     try:
-        # 1. Feedback Pie Chart Data
+        # Feedback Pie Chart 
         confirmed_count = diagnoses_collection.count_documents({'confirmed_accurate': True})
         reported_count = diagnoses_collection.count_documents({'reported_as_inaccurate': True})
         
-        # 2. Inaccuracy Bar Chart Data
+        # Inaccuracy Bar Chart 
         pipeline = [
             {"$match": {"reported_as_inaccurate": True}},
             {"$group": {"_id": "$disease_name", "count": {"$sum": 1}}},
@@ -789,10 +789,9 @@ def admin_chart_data():
     except Exception as e:
         print(f"Error fetching chart data: {e}")
         return jsonify({"error": str(e)}), 500
-# --- END NEW API ---
 
 
-# --- FOLLOW-UP ROUTES ---
+# FOLLOW-UP ROUTES
 @app.route('/follow_up/<original_diagnosis_id>')
 @login_required
 def follow_up_diagnose(original_diagnosis_id):
@@ -821,4 +820,5 @@ def follow_up_results(new_diagnosis_id):
 if __name__ == '__main__':
     if not os.path.exists('static/uploads'):
         os.makedirs('static/uploads')
+
     app.run(debug=True)
