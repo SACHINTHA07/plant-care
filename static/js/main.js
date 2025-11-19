@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-    // --- Mobile Menu Toggle ---
+    // Mobile Menu Toggle
     const menuToggle = document.getElementById('menu-toggle');
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- Custom Modal Logic (Alerts & Deletes) ---
+    // Custom Modal Logic (Alerts & Deletes)
     const modalOverlay = document.getElementById('custom-confirm-overlay');
     const modalBox = document.querySelector('#custom-confirm-overlay .modal-box');
     const modalTitle = document.querySelector('#custom-confirm-overlay .modal-title');
@@ -76,10 +76,9 @@ document.addEventListener('DOMContentLoaded', function() {
             hideModal(); 
         });
     }
-    // --- End of Modal Logic ---
 
 
-    // --- FullCalendar Initialization ---
+    // Calendar Initialization
     const calendarEl = document.getElementById('calendar');
     if (calendarEl) {
         const calendar = new FullCalendar.Calendar(calendarEl, {
@@ -117,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
         calendar.render();
     }
 
-    // --- Add Full Schedule to Calendar ---
+    // Add Full Schedule to Calendar
     const addScheduleBtn = document.getElementById('add-schedule-btn');
     if (addScheduleBtn) {
         addScheduleBtn.addEventListener('click', function() {
@@ -152,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- Schedule Follow-up Button ---
+    // Schedule Follow-up Button
     const scheduleFollowUpBtn = document.getElementById('schedule-follow-up-btn');
     if (scheduleFollowUpBtn) {
         scheduleFollowUpBtn.addEventListener('click', function() {
@@ -170,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- Toggle Task Completion on Dashboard ---
+    // Toggle Task Completion on Dashboard
     const taskCheckboxes = document.querySelectorAll('.task-item input[type="checkbox"]');
     taskCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function() {
@@ -187,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // --- Delete Task from Dashboard ---
+    // Delete Task from Dashboard
     document.querySelectorAll('.delete-task-btn').forEach(button => {
         button.addEventListener('click', function() {
             const taskId = this.dataset.taskId;
@@ -214,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // --- Delete Logbook or User Entry Confirmation (for admin/logbook) ---
+    // Delete Logbook or User Entry Confirmation (for admin)
     document.querySelectorAll('.delete-log-form').forEach(form => {
         form.addEventListener('submit', function(event) {
             event.preventDefault(); 
@@ -247,9 +246,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // --- Admin & Report Modals ---
-
-    // --- Edit User Modal (Admin) ---
+    // Admin & Report Modals
+    // Edit User Modal
     const editUserOverlay = document.getElementById('edit-user-overlay');
     const editUserForm = document.getElementById('edit-user-form');
     
@@ -281,7 +279,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 200);
     }
 
-    // --- Report Diagnosis Modal (User) ---
+    // Report Diagnosis Modal
     const reportOverlay = document.getElementById('report-diagnosis-overlay');
     const reportCancelBtn = document.getElementById('report-btn-cancel');
     const reportConfirmBtn = document.getElementById('report-btn-confirm');
@@ -353,7 +351,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- Accuracy/Report Button Listeners ---
+    // Accuracy/Report Button
     document.querySelectorAll('.btn-confirm-accuracy').forEach(button => {
         button.addEventListener('click', function() {
             const diagnosisId = this.dataset.diagnosisId;
@@ -397,7 +395,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-    // --- NEW: Admin Charts ---
+    // Admin Charts
     const pieChartCtx = document.getElementById('feedbackPieChart');
     const barChartCtx = document.getElementById('inaccuracyBarChart');
 
@@ -407,7 +405,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 
-                // 1. Build Pie Chart
+                // Build Pie Chart
                 if (pieChartCtx && data.pieData && (data.pieData.counts[0] > 0 || data.pieData.counts[1] > 0)) {
                     new Chart(pieChartCtx, {
                         type: 'doughnut',
@@ -416,8 +414,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             datasets: [{
                                 data: data.pieData.counts,
                                 backgroundColor: [
-                                    'rgba(76, 175, 80, 0.7)',  // --primary-green
-                                    'rgba(220, 53, 69, 0.7)'   // --danger-color
+                                    'rgba(76, 175, 80, 0.7)',  
+                                    'rgba(220, 53, 69, 0.7)'  
                                 ],
                                 borderColor: [
                                     '#4CAF50',
@@ -439,7 +437,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     pieChartCtx.parentElement.innerHTML = '<p class="empty-state" style="padding-top: 50px;">No feedback data to display.</p>';
                 }
 
-                // 2. Build Bar Chart
+                // Build Bar Chart
                 if (barChartCtx && data.barData && data.barData.labels.length > 0) {
                     new Chart(barChartCtx, {
                         type: 'bar',
@@ -448,13 +446,13 @@ document.addEventListener('DOMContentLoaded', function() {
                             datasets: [{
                                 label: 'Inaccuracy Reports',
                                 data: data.barData.counts,
-                                backgroundColor: 'rgba(248, 215, 218, 0.7)', // light red
-                                borderColor: 'rgba(220, 53, 69, 1)',   // solid red
+                                backgroundColor: 'rgba(248, 215, 218, 0.7)',
+                                borderColor: 'rgba(220, 53, 69, 1)',  
                                 borderWidth: 1
                             }]
                         },
                         options: {
-                            indexAxis: 'y', // Makes it a horizontal bar chart
+                            indexAxis: 'y', // Makes it a horizontal 
                             responsive: true,
                             maintainAspectRatio: false,
                             plugins: { 
@@ -478,6 +476,6 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => console.error('Error fetching chart data:', error));
     }
-    // --- END: Admin Charts ---
+
 
 }); 
