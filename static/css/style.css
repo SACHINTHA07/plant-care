@@ -1,15 +1,15 @@
-/* --- Global Styles & Variables --- */
+/* Global Styles & Variables */
 :root {
     --primary-green: #4CAF50;
     --dark-green: #388E3C;
     --light-green-bg: #e8f5e9;
-    --background-color: #f8f9fa; /* This is fine */
+    --background-color: #f8f9fa;
     --card-bg: #ffffff;
     --text-primary: #212529;
     --text-secondary: #6c757d;
-    --border-color: #eef1f4; /* MUCH softer border */
+    --border-color: #eef1f4; /* softer the border */
     --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.04); /* Softer shadow */
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); /* New shadow for hovers */
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); /* shadow for hovers */
     --danger-color: #dc3545;
 }
 * {
@@ -24,7 +24,7 @@ body {
     color: var(--text-primary);
 }
 
-/* --- Layout --- */
+/* Layout */
 .app-container {
     display: flex;
 }
@@ -52,7 +52,7 @@ body {
     margin-left: 0;
 }
 
-/* --- Sidebar --- */
+/* Sidebar */
 .sidebar-header {
     font-size: 24px;
     font-weight: 700;
@@ -97,7 +97,7 @@ body {
     font-weight: 600;
 }
 
-/* --- Header --- */
+/* Header */
 .header {
     display: flex;
     justify-content: flex-end;
@@ -150,7 +150,7 @@ body {
 }
 
 
-/* --- General Content & Cards --- */
+/* General Content & Cards */
 h1 {
     font-size: 28px;
     margin-bottom: 8px;
@@ -196,7 +196,7 @@ hr {
     margin: 24px 0;
 }
 
-/* --- Dashboard --- */
+/* Dashboard */
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -376,7 +376,7 @@ hr {
     background: #aaa;
 }
 
-/* --- Smart Suggestions & Cards --- */
+/* Smart Suggestions & Cards */
 .smart-suggestions h2 {
     font-size: 20px;
     margin-top: 40px;
@@ -431,18 +431,18 @@ hr {
 }
 
 
-/* --- Field Insights Summary (Desktop Default) --- */
+/* Field Insights Summary (Desktop Default) */
 .news-summary {
     line-height: 1.5;
     margin-bottom: 16px;
-    flex-grow: 1; /* This is important for card alignment */
+    flex-grow: 1; /* card alignment */
 }
 
-/* === Apply scrolling ONLY on smaller screens === */
+/* Apply scrolling only for smaller screens */
 @media (max-width: 992px) {
     .news-summary {
         max-height: 120px;   /* Apply height limit */
-        overflow-y: auto;    /* Add scrollbar if needed */
+        overflow-y: auto;    /* Add scrollbar (auto) */
         padding-right: 10px; /* Add space for scrollbar */
     }
 
@@ -463,7 +463,7 @@ hr {
     }
 }
 
-/* Enhanced Weather Card */
+/* modify Weather Card */
 .weather-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -582,7 +582,7 @@ hr {
     line-height: 1.5;
 }
 
-/* --- Authentication Pages --- */
+/* Authentication Pages */
 .auth-container {
     display: flex;
     justify-content: center;
@@ -698,7 +698,7 @@ hr {
     font-weight: 500;
 }
 
-/* --- Flash Messages --- */
+/* Flash Messages */
 .flash {
     padding: 1rem;
     margin-bottom: 1rem;
@@ -715,7 +715,7 @@ hr {
     color: #721c24;
 }
 
-/* --- Diagnose Page --- */
+/* Diagnose Page */
 .upload-area {
     border: 2px dashed var(--border-color);
     border-radius: 12px;
@@ -793,7 +793,7 @@ hr {
     font-weight: bold;
 }
 
-/* --- Results Page --- */
+/* Results Page */
 .results-container {
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -852,8 +852,8 @@ hr {
     margin-bottom: 24px;
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    overflow-x: auto; /* This is the fix */
-    -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* smooth scrolling */
 }
 
 .schedule-table {
@@ -892,7 +892,7 @@ hr {
     color: var(--text-primary);
 }
 
-/* --- Logbook Page --- */
+/* Logbook Page */
 .logbook-container {
     display: flex;
     flex-direction: column;
@@ -950,7 +950,7 @@ hr {
     flex-wrap: wrap; 
 }
 
-/* --- Calendar Page --- */
+/* Calendar Page */
 #calendar {
     min-height: 600px;
 }
@@ -965,7 +965,7 @@ hr {
     border-color: var(--primary-green);
 }
 
-/* --- Account Page --- */
+/* Account Page */
 .form-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -984,7 +984,7 @@ input:disabled {
     cursor: not-allowed;
 }
 
-/* --- Responsive Design & Mobile Menu --- */
+/* Responsive Design & Mobile Menu */
 .menu-toggle {
     display: none;
     background: none;
@@ -1112,37 +1112,36 @@ input:disabled {
     }
 
     .btn {
-        padding: 14px 20px; /* Increase tap area */
-        font-size: 15px;    /* Make text readable */
+        padding: 14px 20px; 
+        font-size: 15px;   
         text-align: center;
     }
 
     .action-buttons,
     .log-actions,
     .upload-buttons {
-        flex-direction: column; /* Stack buttons */
-        align-items: stretch;   /* Make them full-width */
+        flex-direction: column; 
+        align-items: stretch;  
         gap: 12px;
     }
     
     .log-actions .btn-danger {
-        /* Fix for delete/report buttons in logbook */
         width: 100%;
     }
 
-    /* --- Fix Calendar Header --- */
+    /* Calendar Header */
     .fc-header-toolbar.fc-toolbar {
-        flex-direction: column; /* Stack the header elements */
+        flex-direction: column;
         gap: 16px;
     }
 
     .fc-header-toolbar .fc-toolbar-chunk:nth-child(2) {
-        /* Move the "November 2025" title to the top */
+        /* calender title to the top */
         order: -1; 
     }
     
     .fc .fc-button {
-        /* Make month/week/day text larger */
+        /* month/week/day text size and padding */
         font-size: 14px;
         padding: 8px 12px;
     }
@@ -1177,14 +1176,14 @@ input:disabled {
     margin-bottom: 16px;
 }
 
-/* --- Action Buttons on Results Page --- */
+/* Action Buttons on Results Page */
 .action-buttons {
     display: flex;
     gap: 16px;
     margin-top: 16px;
 }
 
-/* --- Follow-up Results Page --- */
+/* Follow-up Results Page */
 .comparison-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1212,9 +1211,9 @@ input:disabled {
     }
 }
 
-/* --- Custom Confirmation Modal --- */
+/* Custom Confirmation Modal */
 .modal-overlay {
-    display: none; /* Hidden by default */
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -1230,7 +1229,7 @@ input:disabled {
 
 .modal-overlay.active {
     opacity: 1;
-    display: flex; /* Show the modal */
+    display: flex;
 }
 
 .modal-box {
@@ -1273,18 +1272,18 @@ input:disabled {
     flex-grow: 1;
 }
 
-/* --- Modal "Alert" Mode --- */
+/*  Modal Alert */
 /* This class hides the "Cancel" button */
 .modal-box.is-alert .modal-actions .btn-secondary {
     display: none;
 }
 
-/* --- Admin Edit User Modal --- */
+/* Admin Edit User Modal */
 #edit-user-overlay .modal-box {
     transition: all 0.2s ease-in-out;
 }
 
-/* --- User Report Buttons --- */
+/* User Report Buttons */
 .btn-danger#open-report-modal-btn {
     background-color: #fce8e6;
     color: var(--danger-color);
@@ -1294,7 +1293,7 @@ input:disabled {
     background-color: #f8d7da;
 }
 
-/* --- Report Diagnosis Modal --- */
+/* Report Diagnosis Modal */
 #report-diagnosis-overlay textarea {
     resize: vertical;
     min-height: 80px;
@@ -1329,21 +1328,21 @@ input:disabled {
     text-decoration: underline;
 }
 
-/* Admin Chart Sizing */
+/* Chart Sizing */
 .chart-container {
     position: relative;
-    height: 300px; /* Adjust this height as needed */
+    height: 300px; /* Adjust this height */
     width: 100%;
 }
 
-/* --- 1. Form & Input Polish --- */
+/* Form & Input Polish */
 .form-group input,
 .form-group select,
 .form-group textarea {
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Add a green "glow" when a user clicks an input */
+/* Add a green glow when a user clicks an input */
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
@@ -1352,19 +1351,18 @@ input:disabled {
     outline: none;
 }
 
-/* Style the admin <select> dropdowns to match */
+/* Style the admin select dropdowns to match */
 .form-group select {
-    /* --- Base input styles (this was missing) --- */
     width: 100%;
     padding: 12px;
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    background-color: var(--card-bg); /* Ensures it's not transparent */
-    font-family: inherit; /* Use the same font */
-    font-size: 12; /* Use the same font size */
+    background-color: var(--card-bg);
+    font-family: inherit; 
+    font-size: 12;
     color: var(--text-primary);
     
-    /* --- Custom select styling --- */
+    /* Custom select styling */
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -1372,12 +1370,12 @@ input:disabled {
     background-position: right 0.75rem center;
     background-repeat: no-repeat;
     background-size: 1.25em;
-    padding-right: 2.5rem; /* Make space for the arrow */
+    padding-right: 2.5rem;
 }
 
-/* --- 2. Loading Spinner Overlay --- */
+/* Loading Spinner */
 .loading-overlay {
-    display: none; /* Hidden by default */
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -1412,4 +1410,5 @@ input:disabled {
 }
 @keyframes spin {
     to { transform: rotate(360deg); }
+
 }
